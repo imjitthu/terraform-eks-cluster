@@ -6,7 +6,7 @@ resource "aws_vpc" "vpc" {
 }
 
 resource "aws_subnet" "public_subnet" {
-  vpc_id = aws_vpc.eks_vpc.id
+  vpc_id = aws_vpc.vpc.id
   cidr_block = "${var.PUB_SUB_CIDR}"
   availability_zone = ""
   map_public_ip_on_launch = "true" #it makes this a public subnet
@@ -16,7 +16,7 @@ resource "aws_subnet" "public_subnet" {
 }
 
 resource "aws_subnet" "private_subnet" {
-  vpc_id = aws_vpc.eks_vpc.id
+  vpc_id = aws_vpc.vpc.id
   cidr_block = "${var.PRI_SUB_CIDR}"
   availability_zone = ""
   tags = {
@@ -25,14 +25,14 @@ resource "aws_subnet" "private_subnet" {
   }
 
 resource "aws_internet_gateway" "igw" {
-  vpc_id = aws_vpc.eks_vpc.id
+  vpc_id = aws_vpc.vpc.id
   tags   = {
     Name = "eks_igw"
   }
 }  
 
 resource "aws_nat_gateway" "ngw" {
-  allocation_id = aws_eip.nat.id
+  allocation_id = aws_eip.ngw.id
   vpc_id = aws_vpc.vpc.id
   tags = {
     Name = "eks_ngw"
