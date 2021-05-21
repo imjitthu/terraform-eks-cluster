@@ -47,6 +47,17 @@ resource "aws_route_table" "public" {
   }
 }
 
+resource "aws_route_table_association" "public" {
+  gateway_id = aws_internet_gateway.igw.id
+  route_table_id = aws_route_table.public.id
+}
+
+# resource "aws_route_table_association" "a" {
+#   subnet_id      = aws_subnet.foo.id
+#   gateway_id     = aws_internet_gateway.foo.id
+#   route_table_id = aws_route_table.bar.id
+# }
+
 resource "aws_route_table" "private" {
   vpc_id = aws_vpc.vpc.id
   route = {
@@ -54,6 +65,12 @@ resource "aws_route_table" "private" {
     gateway_id = aws_nat_gateway.ngw.id
   }
 }
+
+resource "aws_route_table_association" "private" {
+  gateway_id = aws_nat_gateway.ngw.id
+  route_table_id = aws_route_table.private.id
+}
+
 data "aws_eks_cluster" "test_eks_cluster" {
   name = module.test_eks_cluster.cluster_id
 }
