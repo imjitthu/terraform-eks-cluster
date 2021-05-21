@@ -3,6 +3,7 @@ pipeline {
     stages ('AWS EKS Cluster') {
         stage ('Creating AWS EKS Cluster') {
             steps {
+                
                 sh """
                 terraform init
                 terraform apply -auto-approve
