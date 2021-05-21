@@ -47,10 +47,13 @@ resource "aws_nat_gateway" "ngw" {
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.vpc.id
   gateway_id = aws_internet_gateway.igw.id
-  route = { [
-    "cidr_block = "0.0.0.0/0"",
-    "gateway_id = aws_internet_gateway.igw.id",
-  ] }
+  route = {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw.id
+    }
+  tags = {
+    "Name" = "eks_public_rt"
+  }
 }
 
 resource "aws_route_table_association" "public" {
@@ -70,6 +73,9 @@ resource "aws_route_table" "private" {
   route = {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_nat_gateway.ngw.id
+  }
+  tags = {
+    "Name" = "elk_private_rt"
   }
 }
 
