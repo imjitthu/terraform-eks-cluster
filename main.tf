@@ -48,7 +48,7 @@ resource "aws_route_table" "public" {
   vpc_id = aws_vpc.vpc.id
   gateway_id = aws_internet_gateway.igw.id
   cidr_block = "0.0.0.0/0"
-    tags = {
+  tags = {
     "Name" = "eks_public_rt"
   }
 }
@@ -58,19 +58,12 @@ resource "aws_route_table_association" "public" {
   route_table_id = aws_route_table.public.id
 }
 
-# resource "aws_route_table_association" "a" {
-#   subnet_id      = aws_subnet.foo.id
-#   gateway_id     = aws_internet_gateway.foo.id
-#   route_table_id = aws_route_table.bar.id
-# }
-
 resource "aws_route_table" "private" {
   vpc_id = aws_vpc.vpc.id
   gateway_id = aws_nat_gateway.ngw.id
   cidr_block = "0.0.0.0/0"
-  }
   tags = {
-    "Name" = "eks_private_rt"
+    Name = "eks_private_rt"
   }
 }
 
