@@ -1,8 +1,9 @@
 pipeline {
     agent any
-tools {
-    terraform 'terraformtool'
-}
+
+// tools {
+//     terraform 'terraformtool'
+// }
 
     stages ('AWS EKS Cluster') {
         stage ('Creating AWS EKS Cluster') {
