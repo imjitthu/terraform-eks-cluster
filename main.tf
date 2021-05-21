@@ -38,7 +38,7 @@ resource "aws_eip" "eip" {
 resource "aws_nat_gateway" "ngw" {
   allocation_id = aws_eip.eip.id
   vpc_id = aws_vpc.vpc.id
-  depends_on = aws_internet_gateway.ngw
+  depends_on = [aws_internet_gateway.ngw]
   tags = {
     Name = "eks_ngw"
   }
