@@ -36,11 +36,17 @@ resource "aws_eip" "eip" {
 
 }
 resource "aws_nat_gateway" "ngw" {
-  #allocation_id = aws_eip.eip.id
+  allocation_id = aws_eip.eip.id
   vpc_id = aws_vpc.vpc.id
   tags = {
     Name = "eks_ngw"
   }
+}
+
+resource "aws_nat_gateway" "ngw" {
+  # ... other arguments ...
+
+  depends_on = [aws_internet_gateway.ngw]
 }
 
 resource "aws_route_table" "public" {
