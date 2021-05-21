@@ -31,6 +31,9 @@ resource "aws_internet_gateway" "igw" {
   }
 }  
 
+resource "aws_eip" "eip" {
+    depends_on = aws_internet_gateway.igw.id
+}
 resource "aws_nat_gateway" "ngw" {
   allocation_id = aws_eip.ngw.id
   vpc_id = aws_vpc.vpc.id
