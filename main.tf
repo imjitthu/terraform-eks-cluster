@@ -72,10 +72,10 @@
 #   }
 # }
 
-resource "aws_route_table_association" "private" {
-  gateway_id = aws_nat_gateway.ngw.id
-  route_table_id = aws_route_table.private.id
-}
+# resource "aws_route_table_association" "private" {
+#   gateway_id = aws_nat_gateway.ngw.id
+#   route_table_id = aws_route_table.private.id
+# }
 
 data "aws_eks_cluster" "test_eks_cluster" {
   name = module.test_eks_cluster.cluster_id
@@ -90,7 +90,7 @@ provider "kubernetes" {
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
   token                  = data.aws_eks_cluster_auth.cluster.token
   load_config_file       = false
-  version                = "~> 1.9"
+  #version                = "~> 1.9"
 }
 
 module "test_eks_cluster" {
@@ -99,6 +99,7 @@ module "test_eks_cluster" {
   cluster_version = "1.17"
   subnets         = ["", ""]
   vpc_id          = ""
+}
 
 node_groups = {
   public = {
