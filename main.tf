@@ -46,7 +46,7 @@ resource "aws_nat_gateway" "ngw" {
 
 resource "aws_route_table" "public" {
   route = [ {
-     vpc_id = aws_vpc.vpc.id
+     ##vpc_id = aws_vpc.vpc.id
      gateway_id = aws_internet_gateway.igw.id
      cidr_block = "0.0.0.0/0"
   } ]
