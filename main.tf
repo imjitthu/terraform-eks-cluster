@@ -32,9 +32,10 @@
 # }  
 
 # resource "aws_eip" "eip" {
-#     vpc = false
-
+#   vpc        = true
+#   depends_on = [aws_internet_gateway.igw]
 # }
+
 # resource "aws_nat_gateway" "ngw" {
 #   allocation_id = aws_eip.eip.id
 #   vpc_id = aws_vpc.vpc.id
