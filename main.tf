@@ -1,4 +1,4 @@
-resource "aws_vpc" "test_eks_vpc" {
+resource "aws_vpc" "vpc" {
   cidr_block = "${var.VPC_CIDR}"
   tags = {
     "Name" = "eks_vpc"
@@ -6,7 +6,7 @@ resource "aws_vpc" "test_eks_vpc" {
 }
 
 resource "aws_subnet" "public_subnet" {
-  vpc_id = aws_vpc.test_eks_vpc.id
+  vpc_id = aws_vpc.eks_vpc.id
   cidr_block = "${var.PUB_SUB_CIDR}"
   availability_zone = ""
   map_public_ip_on_launch = "true" #it makes this a public subnet
@@ -16,13 +16,44 @@ resource "aws_subnet" "public_subnet" {
 }
 
 resource "aws_subnet" "private_subnet" {
-  vpc_id = aws_vpc.test_eks_vpc.id
+  vpc_id = aws_vpc.eks_vpc.id
   cidr_block = "${var.PRI_SUB_CIDR}"
   availability_zone = ""
   tags = {
     "Name" = "private_eks_subnet"
   }
   }
+
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.eks_vpc.id
+  tags   = {
+    Name = "eks_igw"
+  }
+}  
+
+resource "aws_nat_gateway" "ngw" {
+  allocation_id = aws_eip.nat.id
+  vpc_id = aws_vpc.vpc.id
+  tags = {
+    Name = "eks_ngw"
+  }
+}
+
+resource "aws_route_table" "public" {
+  vpc_id = aws_vpc.vpc.id
+  route = {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw.id
+  }
+}
+
+resource "aws_route_table" "private" {
+  vpc_id = aws_vpc.vpc.id
+  route = {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_nat_gateway.ngw.id
+  }
+}
 data "aws_eks_cluster" "test_eks_cluster" {
   name = module.test_eks_cluster.cluster_id
 }
