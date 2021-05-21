@@ -1,8 +1,28 @@
-locals {
-  key_name = ""
-  key_path = ""
+resource "aws_vpc" "test_eks_vpc" {
+  cidr_block = "${var.VPC_CIDR}"
+  tags = {
+    "Name" = "eks_vpc"
+  }
 }
 
+resource "aws_subnet" "public_subnet" {
+  vpc_id = aws_vpc.test_eks_vpc.id
+  cidr_block = "${var.PUB_SUB_CIDR}"
+  availability_zone = ""
+  
+  tags = {
+    "Name" = "public_eks_subnet"
+  }
+}
+
+resource "aws_subnet" "private_subnet" {
+  vpc_id = aws_vpc.test_eks_vpc.id
+  cidr_block = "${var.PRI_SUB_CIDR}"
+  availability_zone = ""
+  tags = {
+    "Name" = "private_eks_subnet"
+  }
+  }
 data "aws_eks_cluster" "test_eks_cluster" {
   name = module.test_eks_cluster.cluster_id
 }
@@ -33,7 +53,7 @@ node_groups = {
     max_capacity     = 10
     min_capacity     = 1
 
-    instance_type    = "t2.small"
+    instance_type    = "${var.INSTANCE_TYPE}"
     k8s_lables       = {
       Environment    = "public"
     }
@@ -44,7 +64,7 @@ node_groups = {
     max_capacity     = 10
     min_capacity     = 1
 
-    instance_type    = "t2.small"
+    instance_type    = "${var.INSTANCE_TYPE}"
     k8s_lables       = {
       Environment    = "private"
     }
