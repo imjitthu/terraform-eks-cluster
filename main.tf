@@ -9,7 +9,7 @@ resource "aws_subnet" "public_subnet" {
   vpc_id = aws_vpc.test_eks_vpc.id
   cidr_block = "${var.PUB_SUB_CIDR}"
   availability_zone = ""
-  
+  map_public_ip_on_launch = "true" #it makes this a public subnet
   tags = {
     "Name" = "public_eks_subnet"
   }
